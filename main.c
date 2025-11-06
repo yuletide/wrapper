@@ -86,8 +86,8 @@ static void credentialHandler(struct shared_ptr *credReqHandler,
 
     if (need2FA) {
         if (args_info.code_from_file_flag) {
-            fprintf(stderr, "[!] Enter your 2FA code into rootfs/data/code.txt\n");
-            fprintf(stderr, "[!] Example command: echo -n 114514 > rootfs/data/2fa.txt\n");
+            fprintf(stderr, "[!] Enter your 2FA code into code.txt in mounted volume\n");
+            fprintf(stderr, "[!] Example command: echo -n 114514 > code.txt\n");
             fprintf(stderr, "[!] Waiting for input...\n");
             int count = 0;
             while (1)
@@ -96,10 +96,10 @@ static void credentialHandler(struct shared_ptr *credReqHandler,
                     fprintf(stderr, "[!] Failed to get 2FA Code in 60s. Exiting...\n");
                     exit(0);
                 }
-                if (file_exists("/data/2fa.txt")) {
-                    FILE *fp = fopen("/data/2fa.txt", "r");
+                if (file_exists("/tmp/2fa.txt")) {
+                    FILE *fp = fopen("/tmp/2fa.txt", "r");
                     fscanf(fp, "%6s", amPassword + passLen);
-                    remove("/data/2fa.txt");
+                    remove("/tmp/2fa.txt");
                     fprintf(stderr, "[!] Code file detected! Logging in...\n");
                     break;
                 } else {
